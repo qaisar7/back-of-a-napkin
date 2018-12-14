@@ -31,7 +31,6 @@ func main() {
 	fmt.Println("channnnnnnels", waits)
 	totalThreads := 3
 	jobC := make(chan time.Duration, totalThreads)
-	//shutdown := make(chan struct{})
 	go func() {
 		for _, w := range waits {
 			fmt.Printf("sending wait %s on job channel\n", time.Millisecond*w)
