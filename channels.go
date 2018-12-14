@@ -1,7 +1,6 @@
 /*
   Back of a napkin test of how channels communicate with each other.
-  Mocks testing a request being processed by multiple channels and preemptively abort when successful.
-  Closes all the threads before exiting.
+  Mocks testing a request being processed by multiple channels.
 */
 package main
 
@@ -40,7 +39,6 @@ func main() {
 		}
 		fmt.Println("closing job channel")
 		close(jobC)
-		//close(shutdown)
 	}()
 
 	threads := []chan threadId{}
