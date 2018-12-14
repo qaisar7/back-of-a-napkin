@@ -37,7 +37,7 @@ func main() {
 			close(t)
 		}(i, c, t)
 	}
-	
+
 	go func() {
 		for _, t := range threads {
 			for i := range t {
@@ -46,7 +46,7 @@ func main() {
 		}
 		close(c)
 	}()
-	
+
 	for i := range c {
 		fmt.Printf("Thread %d done\n", i)
 		if i == 3 {
