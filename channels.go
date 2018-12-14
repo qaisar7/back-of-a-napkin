@@ -20,7 +20,7 @@ func generateInput(n int) []time.Duration {
 	return ar
 }
 
-type threadId struct {
+type threadID struct {
 	id   int
 	jobs int
 }
@@ -41,12 +41,12 @@ func main() {
 		close(jobC)
 	}()
 
-	threads := []chan threadId{}
+	threads := []chan threadID{}
 
 	for i := 0; i < totalThreads; i++ {
-		t := make(chan threadId)
+		t := make(chan threadID)
 		threads = append(threads, t)
-		go func(i int, c chan time.Duration, t chan threadId) {
+		go func(i int, c chan time.Duration, t chan threadID) {
 			jobs := 0
 			for d := range c {
 				fmt.Printf("Thread %d sleeping now for %s \n", i, time.Millisecond*d)
@@ -55,7 +55,7 @@ func main() {
 				fmt.Printf("Thread %d waking after %s \n", i, time.Now().Sub(tm))
 				jobs++
 			}
-			t <- threadId{i, jobs}
+			t <- threadID{i, jobs}
 			close(t)
 		}(i, jobC, t)
 	}
