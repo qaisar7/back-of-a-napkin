@@ -1,5 +1,6 @@
 package main
 
+// Solution to problem at https://www.hackerrank.com/challenges/contacts/problem
 import (
 	"bufio"
 	"fmt"
@@ -50,9 +51,6 @@ func find(nodes map[byte]*node, str string) int32 {
 	return 0
 }
 
-/*
- * Complete the contacts function below.
- */
 func contacts(queries [][]string) []int32 {
 	root := &node{}
 	results := []int32{}
