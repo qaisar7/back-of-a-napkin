@@ -1,7 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
+	"os"
 )
 
 type node struct {
@@ -10,6 +12,15 @@ type node struct {
 	right *node
 }
 
+var (
+	reader *bufio.Reader
+)
+
+func init() {
+	// Create a new reader that reads from standard input (os.Stdin)
+	reader = bufio.NewReader(os.Stdin)
+
+}
 func main() {
 	values := []int{5, 4, 8, 11, -1, 13, 4, 7, 2, -1, -1, -1, -1, -1, 1}
 	n := arrayToTree(values)
@@ -27,74 +38,37 @@ func main() {
 	fmt.Println(targetSumIterative(n, 23))
 	values = []int{3, 5, 1, 6, 2, 0, 8, -1, -1, 7, 4, -1, -1, -1, -1}
 	n = arrayToTree(values)
-	fmt.Println(leastCommonAncestor(n, 6, 8))
+
+	fmt.Println(leastCommonAncestor(n, 6, 4).val)
 }
 
-func leastCommonAncestor(n *node, p, q int) ([]int, []int, int) {
-	// find the common ancestor of p and q. pA denotes the ancestor so far found for p and qA for q.
+func leastCommonAncestor(n *node, p, q int) *node {
+	fmt.Println("Enter to continue")
+	reader.ReadString('\n')
+
 	if n == nil {
-		return []int{}, []int{}, -1
+		return nil
 	}
-	pAL, qAL, aL := leastCommonAncestor(n.left, p, q)
-	pAR, qAR, aR := leastCommonAncestor(n.right, p, q)
-	pA, qA := []int{}, []int{}
-	a := -1
-	if len(pAL) != 0 {
-		pA = pAL
+	fmt.Printf("n.val %d\n", n.val)
+	if n.val == p || n.val == q {
+		fmt.Printf("left.val || right.val n.val=%d\n", n.val)
+		return n
 	}
-	if len(pAR) != 0 {
-		pA = pAR
+	left := leastCommonAncestor(n.left, p, q)
+	right := leastCommonAncestor(n.right, p, q)
+
+	if left != nil && right != nil {
+		fmt.Printf("n.val=%d left.val && right.val %d %d\n", n.val, left.val, right.val)
+		return n
 	}
-	if len(qAL) != 0 {
-		qA = qAL
+	if left != nil {
+		fmt.Printf("n.val=%d left !=nil %d\n", n.val, left.val)
+		return left
 	}
-	if len(qAR) != 0 {
-		qA = qAR
+	if right != nil {
+		fmt.Printf("n.val=%d right.val %d\n", n.val, right.val)
 	}
-	if aL != -1 {
-		a = aL
-	}
-	if aR != -1 {
-		a = aR
-	}
-	if n.val == p {
-		pA = append(pA, p)
-		return pA, qA, a
-	}
-	if n.val == q {
-		qA = append(qA, q)
-		return pA, qA, a
-	}
-	if len(pA) != 0 {
-		pA = append(pA, n.val)
-	}
-	if len(qA) != 0 {
-		qA = append(qA, n.val)
-	}
-	if a == -1 && len(pA) != 0 && len(qA) != 0 {
-		pl := len(pA)
-		ql := len(qA)
-		var shortOne []int
-		var longOne []int
-		shortOne = qA
-		longOne = pA
-		if pl < ql {
-			shortOne = pA
-			longOne = qA
-		}
-		keys := map[int]bool{}
-		for i := 0; i < len(longOne); i++ {
-			keys[longOne[i]] = true
-		}
-		for i := 0; i < len(shortOne); i++ {
-			if _, ok := keys[shortOne[i]]; ok {
-				a = shortOne[i]
-				return pA, qA, a
-			}
-		}
-	}
-	fmt.Println(pA, qA, a)
-	return pA, qA, a
+	return right
 }
 
 func targetSumIterative(n *node, target int) bool {
